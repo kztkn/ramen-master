@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html id="content" lang="ja">
 
 <head>
     <meta charset="utf-8">
@@ -8,14 +8,24 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico" id="favicon">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="css/main.css">
+
     <title>ラーメンアプリ</title>
 </head>
 
 <body>
-    <h1>ラーメンアプリ</h1>
+    <header>　</header>
+
+    <h1>
+        <img src="images/ramen.svg" width="32" height="32">
+        Random Ramen
+        <img src="images/ramen.svg" width="32" height="32">
+    </h1>
+    <h2>Please enter your name</h2>
+
     <div id="nameSetting">
-        <input v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br>
-        <button v-on:click="playgame">さて、今夜、「{{ inputName }}」がいただくのは、</button>
+        <input class="textbox" v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br><br>
+        <button v-on:click="playgame" class="btn btn-flat"> <span>さて、今夜、「{{ inputName }}」がいただくのは、</span></button>
         <p>→<b>{{ main }} {{ mainAmount }}</b></p>
         <p>→<b>{{ side }} {{ sideAmount }}</b></p>
         <p><b>合計金額： {{ totalAmount }}</b></p>
@@ -24,23 +34,24 @@
 
     </div>
 
-    ---設定（未実装）---
+    <div id="margin">---設定（未実装）---</div>
     <div id="checklist">
-        <input type="checkbox" id="menu1" value="ラーメン" v-model="checkedNames">
+        <input type="checkbox" id="menu1" value="ラーメン" v-model="checkedNames" checked="checked">
         <label for="ラーメン">ラーメン</label>
         <input type="checkbox" id="menu2" value="サイドメニュー" v-model="checkedNames">
         <label for="サイドメニュー">サイドメニュー</label>
         <input type="checkbox" id="menu3" value="ドリンク" v-model="checkedNames">
         <label for="ドリンク">ドリンク</label>
         <br>
-        <span>Checked names: {{ checkedNames }}</span>
+        <span>設定: {{ checkedNames }}</span>
     </div>
+    <footer>　</footer>
 
 
     <script>
-        const start_se = new Audio('sound/sound.mp3');
+        const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
         const mainJson = [{ "id": "1", "name": "ラーメン(並)", "amount": 700 }, { "id": "2", "name": "ラーメン(中)", "amount": 800 }, { "id": "3", "name": "ラーメン(大)", "amount": 900 }];
-        const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 800 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
+        const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
         // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service_worker.js').then(function (registration) {
@@ -63,7 +74,7 @@
             },
             methods: {
                 playgame: function () {
-                    start_se.play();
+                    button_se.play();
                     // ここにランダムでメニューを決める
                     var mn = Math.floor(Math.random() * mainJson.length);
                     var sn = Math.floor(Math.random() * sideJson.length);
@@ -78,6 +89,10 @@
                 onInput: function () {
                     this.main = '';
                     this.totalAmount = '';
+                    this.mainAmount = '';
+                    this.side = '';
+                    this.sideAmount = '';
+                    this.totalAmount = '';
                 }
             }
         })
@@ -85,9 +100,26 @@
         const checkSetting = new Vue({
             el: 'div#checklist',
             data: {
-                checkedNames: []
+                checkedNames: ['ラーメン', 'サイドメニュー', 'ドリンク']
             }
         })
+
+        const windowHeight = window.innerHeight;   // windowの高さを取得
+
+        // <html>の高さを、windowsの高さいっぱいに設定
+        document.getElementById("content").style.height = windowHeight + "px";
+        // bodyはheight:100%
+        document.body.style.height = "100%";
+
+        // スクロールバー非表示
+        // スマホのときはbodyに、PCのときはhtmlにかけないと反映されないっぽいので分ける
+
+        const isSP = /iPhone|iPod|iPad|Android/i.test(navigator.userAgent);
+        if (isSP) {
+            document.body.style.overflowY = "hidden";
+        } else {
+            document.getElementById("content").style.overflowY = "hidden";
+        }
 
     </script>
 </body>
