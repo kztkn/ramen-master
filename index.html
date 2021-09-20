@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
     <link rel="stylesheet" href="css/main.css">
 
-    <title>ラーメンアプリ</title>
+    <title>Random Ramen</title>
 </head>
 
 <body>
@@ -21,27 +21,25 @@
         Random Ramen
         <img src="images/ramen.svg" width="32" height="32">
     </h1>
-    <h2>Please enter your name</h2>
-
-    <div id="nameSetting">
-        <input class="textbox" v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br><br>
-        <button v-on:click="playgame" class="btn btn-flat"> <span>さて、今夜、「{{ inputName }}」がいただくのは、</span></button>
-        <p>→<b>{{ main }} {{ mainAmount }}</b></p>
-        <p>→<b>{{ side }} {{ sideAmount }}</b></p>
-        <p><b>合計金額： {{ totalAmount }}</b></p>
-
-        <p>{{debug}}</p>
-
+    <div id="main">
+        <!-- <h2>Please enter your name</h2> -->
+        <!-- <input class="textbox" v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br><br> -->
+        <button v-on:click="playgame" class="btn btn-flat">Touch!</button>
+        <!-- <p>ボタンを押すと音がでるのでご注意ください</p> -->
+        <p>ラーメン：<b>{{ main }} {{ mainAmount }}</b></p>
+        <p>トッピング：<b>{{ side }} {{ sideAmount }}</b></p>
+        <!-- <p>ドリンク：<b>{{ drink }} {{ drinkAmount }}</b></p> -->
+        <div id="total">
+            <p><b>合計金額： {{ totalAmount }}</b></p>
+        </div>
     </div>
 
     <div id="margin">---設定（未実装）---</div>
     <div id="checklist">
         <input type="checkbox" id="menu1" value="ラーメン" v-model="checkedNames" checked="checked">
         <label for="ラーメン">ラーメン</label>
-        <input type="checkbox" id="menu2" value="サイドメニュー" v-model="checkedNames">
-        <label for="サイドメニュー">サイドメニュー</label>
-        <input type="checkbox" id="menu3" value="ドリンク" v-model="checkedNames">
-        <label for="ドリンク">ドリンク</label>
+        <input type="checkbox" id="menu2" value="トッピング" v-model="checkedNames">
+        <label for="トッピング">トッピング</label>
         <br>
         <span>設定: {{ checkedNames }}</span>
     </div>
@@ -52,6 +50,7 @@
         const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
         const mainJson = [{ "id": "1", "name": "ラーメン(並)", "amount": 700 }, { "id": "2", "name": "ラーメン(中)", "amount": 800 }, { "id": "3", "name": "ラーメン(大)", "amount": 900 }];
         const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
+        const drinkJson = [{ "id": "1", "name": "からだすこやか茶W", "amount": 200 }, { "id": "2", "name": "瓶ビール", "amount": 500 }];
         // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service_worker.js').then(function (registration) {
@@ -61,15 +60,16 @@
             });
         }
 
-        const nameSetting = new Vue({
-            el: 'div#nameSetting',
+        const main = new Vue({
+            el: 'div#main',
             data: {
                 inputName: '',
                 main: '',
                 mainAmount: '',
                 side: '',
                 sideAmount: '',
-                debug: '',
+                drink: '',
+                drinkAmount: '',
                 totalAmount: '',
             },
             methods: {
@@ -78,13 +78,15 @@
                     // ここにランダムでメニューを決める
                     var mn = Math.floor(Math.random() * mainJson.length);
                     var sn = Math.floor(Math.random() * sideJson.length);
+                    var dn = Math.floor(Math.random() * drinkJson.length);
                     this.main = mainJson[mn].name;
                     this.mainAmount = mainJson[mn].amount;
                     this.side = sideJson[sn].name;
                     this.sideAmount = sideJson[sn].amount;
-
-                    this.totalAmount = this.mainAmount + this.sideAmount;
-                    // this.debug = ;
+                    // this.drink = drinkJson[dn].name;
+                    // this.drinkAmount = drinkJson[dn].amount;
+                    this.totalAmount = this.mainAmount + this.sideAmount + this.drinkAmount;
+                    button_se.play();
                 },
                 onInput: function () {
                     this.main = '';
@@ -92,6 +94,8 @@
                     this.mainAmount = '';
                     this.side = '';
                     this.sideAmount = '';
+                    this.drink = '';
+                    this.drinkAmount = '';
                     this.totalAmount = '';
                 }
             }
@@ -100,7 +104,7 @@
         const checkSetting = new Vue({
             el: 'div#checklist',
             data: {
-                checkedNames: ['ラーメン', 'サイドメニュー', 'ドリンク']
+                checkedNames: ['ラーメン', 'トッピング']
             }
         })
 
