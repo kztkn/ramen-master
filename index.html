@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico" id="favicon">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+    <title>ラーメンアプリ</title>
+</head>
+
+<body>
+    <h1>ラーメンアプリ</h1>
+    <div id="nameSetting">
+        <input v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br>
+        <button v-on:click="playgame">さて、今夜、「{{ inputName }}」がいただくのは、</button>
+        <p>→<b>{{ main }} {{ mainAmount }}</b></p>
+        <p>→<b>{{ side }} {{ sideAmount }}</b></p>
+        <p><b>合計金額： {{ totalAmount }}</b></p>
+
+        <p>{{debug}}</p>
+
+    </div>
+
+    ---設定（未実装）---
+    <div id="checklist">
+        <input type="checkbox" id="menu1" value="ラーメン" v-model="checkedNames">
+        <label for="ラーメン">ラーメン</label>
+        <input type="checkbox" id="menu2" value="サイドメニュー" v-model="checkedNames">
+        <label for="サイドメニュー">サイドメニュー</label>
+        <input type="checkbox" id="menu3" value="ドリンク" v-model="checkedNames">
+        <label for="ドリンク">ドリンク</label>
+        <br>
+        <span>Checked names: {{ checkedNames }}</span>
+    </div>
+
+
+    <script>
+        const start_se = new Audio('sound/sound.mp3');
+        const mainJson = [{ "id": "1", "name": "ラーメン(並)", "amount": 700 }, { "id": "2", "name": "ラーメン(中)", "amount": 800 }, { "id": "3", "name": "ラーメン(大)", "amount": 900 }];
+        const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 800 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
+        // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service_worker.js').then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function (err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+
+        const nameSetting = new Vue({
+            el: 'div#nameSetting',
+            data: {
+                inputName: '',
+                main: '',
+                mainAmount: '',
+                side: '',
+                sideAmount: '',
+                debug: '',
+                totalAmount: '',
+            },
+            methods: {
+                playgame: function () {
+                    start_se.play();
+                    // ここにランダムでメニューを決める
+                    var mn = Math.floor(Math.random() * mainJson.length);
+                    var sn = Math.floor(Math.random() * sideJson.length);
+                    this.main = mainJson[mn].name;
+                    this.mainAmount = mainJson[mn].amount;
+                    this.side = sideJson[sn].name;
+                    this.sideAmount = sideJson[sn].amount;
+
+                    this.totalAmount = this.mainAmount + this.sideAmount;
+                    // this.debug = ;
+                },
+                onInput: function () {
+                    this.main = '';
+                    this.totalAmount = '';
+                }
+            }
+        })
+
+        const checkSetting = new Vue({
+            el: 'div#checklist',
+            data: {
+                checkedNames: []
+            }
+        })
+
+    </script>
+</body>
+
+</html>
