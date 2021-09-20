@@ -23,7 +23,7 @@
     <div id="main">
         <!-- <h2>Please enter your name</h2> -->
         <!-- <input class="textbox" v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br><br> -->
-        <button v-on:click="playgame" class="btn btn-flat">Touch!</button>
+        <button v-on:click="touchButton" class="btn btn-flat">Touch!</button>
         <!-- <p>ボタンを押すと音がでるのでご注意ください</p> -->
         <p>ラーメン：<b>{{ main }} {{ mainAmount }}</b></p>
         <p>トッピング：<b>{{ side }} {{ sideAmount }}</b></p>
@@ -31,6 +31,7 @@
         <div id="total">
             <p><b>合計金額： {{ totalAmount }}</b></p>
         </div>
+        <button v-on:click="clearButton" class="btn btn-flat">Clear</button>
     </div>
 
     <div id="margin">---設定（未実装）---</div>
@@ -46,6 +47,8 @@
 
     <script>
         const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
+        const touch_se = new Audio('sound/touch_01.wav');
+        const clear_se = new Audio('sound/clear_01.wav');
         const mainJson = [{ "id": "1", "name": "ラーメン(並)", "amount": 700 }, { "id": "2", "name": "ラーメン(中)", "amount": 800 }, { "id": "3", "name": "ラーメン(大)", "amount": 900 }];
         const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
         const drinkJson = [{ "id": "1", "name": "からだすこやか茶W", "amount": 200 }, { "id": "2", "name": "瓶ビール", "amount": 500 }];
@@ -71,8 +74,8 @@
                 totalAmount: '',
             },
             methods: {
-                playgame: function () {
-                    button_se.play();
+                touchButton: function () {
+                    touch_se.play();
                     // ここにランダムでメニューを決める
                     var mn = Math.floor(Math.random() * mainJson.length);
                     var sn = Math.floor(Math.random() * sideJson.length);
@@ -84,7 +87,23 @@
                     // this.drink = drinkJson[dn].name;
                     // this.drinkAmount = drinkJson[dn].amount;
                     this.totalAmount = this.mainAmount + this.sideAmount + this.drinkAmount;
-                    button_se.play();
+                    if (this.totalAmount >= 1000) {
+                        console.log('pause');
+                        touch_se.pause();
+                        button_se.play();
+                    }
+
+                },
+                clearButton: function () {
+                    clear_se.play();
+                    this.main = '';
+                    this.totalAmount = '';
+                    this.mainAmount = '';
+                    this.side = '';
+                    this.sideAmount = '';
+                    this.drink = '';
+                    this.drinkAmount = '';
+                    this.totalAmount = '';
                 },
                 onInput: function () {
                     this.main = '';
