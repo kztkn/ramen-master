@@ -17,7 +17,6 @@
     <header>　</header>
 
     <h1>
-        <img src="images/ramen.svg" width="32" height="32">
         Random Ramen
         <img src="images/ramen.svg" width="32" height="32">
     </h1>
@@ -44,7 +43,6 @@
         <span>設定: {{ checkedNames }}</span>
     </div>
     <footer>　</footer>
-
 
     <script>
         const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
@@ -107,24 +105,6 @@
                 checkedNames: ['ラーメン', 'トッピング']
             }
         })
-
-        const windowHeight = window.innerHeight;   // windowの高さを取得
-
-        // <html>の高さを、windowsの高さいっぱいに設定
-        document.getElementById("content").style.height = windowHeight + "px";
-        // bodyはheight:100%
-        document.body.style.height = "100%";
-
-        // スクロールバー非表示
-        // スマホのときはbodyに、PCのときはhtmlにかけないと反映されないっぽいので分ける
-
-        const isSP = /iPhone|iPod|iPad|Android/i.test(navigator.userAgent);
-        if (isSP) {
-            document.body.style.overflowY = "hidden";
-        } else {
-            document.getElementById("content").style.overflowY = "hidden";
-        }
-
     </script>
 </body>
 

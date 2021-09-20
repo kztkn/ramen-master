@@ -1,6 +1,13 @@
 /* @import  url(https://fonts.googleapis.com/css?family=Montserrat); */
 @import url('https://fonts.googleapis.com/earlyaccess/hannari.css');
 
+
+
+html, body {
+  height: 100%;
+  overflow: hidden
+}
+
 html {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -16,8 +23,9 @@ body {
 
 }
 
+
 h1 {
-    font: 3rem 'Caveat', cursive,'ヒラギノ角ゴ pro W3';
+    font: 2rem 'Caveat', cursive,'ヒラギノ角ゴ pro W3';
 }
 
 h2 {
@@ -27,14 +35,18 @@ h2 {
   color:brown;
 }
 
+#main{
+  font-size: 1.1rem
+}
 #margin{
   padding-top: 50px;
   /* margin-top: 300px; */
 
 }
 
+
 button {color:#454545;background:transparent;border-width:2px;border-style: solid;border-color: #454545;position:relative;margin:0.7em;display:inline-block;padding:0.8em 1em;transition:all 0.3s ease-in-out;text-align:center;
-  font-family:comfortaa;font-weight:bold;width:50%;max-width: 360px;font-size:1.2rem}
+  font-family:comfortaa;font-weight:bold;width:50%;max-width: 240px;font-size:1.2rem}
   button:before, button:after {content:'';display:block;position:absolute;border-color:#454545;box-sizing:border-box;border-style:solid;width:1em;height:1em;transition:all 0.3s ease-in-out}
   button:before {top:-6px;left:-6px;border-width:2px 0 0 2px;z-index:5;}
   button:after {bottom:-6px;right:-6px;border-width:0 2px 2px 0;}
