@@ -12,20 +12,17 @@ html {
     -webkit-touch-callout: none;
   }
 body {
-    font: 90% 'ヒラギノ角ゴ pro W3', "Hiragino KaKu Gothic Pro", "メイリオ", Meiryo, Osaka, sans-serif;
+    font-family: 1rem cursive, "Helvetica Neue",    Arial,    "Hiragino Kaku Gothic ProN",    "Hiragino Sans",    Meiryo,    sans-serif;
     color: #333333;
-        display: flex;
-        flex-flow: column;
-        min-height: 100vh;
+    display: flex;
+    flex-flow: column;
+    min-height: 100vh;
 }
 
 h1 {
-    font: 2rem 'Caveat', cursive,'ヒラギノ角ゴ pro W3';
+    font: 2rem cursive;
 }
 
-h2 {
-    font: 1.8rem 'Caveat', cursive,'ヒラギノ角ゴ pro W3';
-}
 #total {
   color:brown;
 }

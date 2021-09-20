@@ -24,17 +24,15 @@
         <!-- <h2>Please enter your name</h2> -->
         <!-- <input class="textbox" v-model="inputName" paceholder="ここに名前をいれてね！" @input="onInput" /><br><br> -->
         <button v-on:click="touchButton" class="btn btn-flat">Touch!</button>
-        <!-- <p>ボタンを押すと音がでるのでご注意ください</p> -->
         <p>ラーメン：<b>{{ main }} {{ mainAmount }}</b></p>
         <p>トッピング：<b>{{ side }} {{ sideAmount }}</b></p>
-        <!-- <p>ドリンク：<b>{{ drink }} {{ drinkAmount }}</b></p> -->
         <div id="total">
             <p><b>合計金額： {{ totalAmount }}</b></p>
         </div>
         <button v-on:click="clearButton" class="btn btn-flat">Clear</button>
-    </div>
 
-    <div id="margin">---設定（未実装）---</div>
+
+    </div>
     <div id="checklist">
         <input type="checkbox" id="menu1" value="ラーメン" v-model="checkedNames" checked="checked">
         <label for="ラーメン">ラーメン</label>
@@ -46,12 +44,13 @@
     <footer>　</footer>
 
     <script>
+        const mainJson = [{ "id": "1", "name": "ラーメン", "amount": 700 }, { "id": "2", "name": "得ラーメン", "amount": 850 }, { "id": "3", "name": "チャーシューメン", "amount": 950 }, { "id": "4", "name": "野菜爆弾ラーメン", "amount": 1000 }];
+        const sideJson = [{ "id": "1", "name": "味玉", "amount": 100 }, { "id": "2", "name": "のり", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 100 }, { "id": "4", "name": "ほうれん草", "amount": 100 }, { "id": "5", "name": "キャベツ", "amount": 100 }, { "id": "6", "name": "キャベチャー", "amount": 100 }, { "id": "7", "name": "チャーシュー", "amount": 250 }, { "id": "8", "name": "チーズ", "amount": 150 }, { "id": "9", "name": "ビール（中瓶）", "amount": 500 }, { "id": "10", "name": "からだすこやか茶", "amount": 200 }];
+        const drinkJson = sideJson;
+        const sizeArray = ["（並）", "（中）", "（大）"];
         const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
         const touch_se = new Audio('sound/touch_01.wav');
         const clear_se = new Audio('sound/clear_01.wav');
-        const mainJson = [{ "id": "1", "name": "ラーメン(並)", "amount": 700 }, { "id": "2", "name": "ラーメン(中)", "amount": 800 }, { "id": "3", "name": "ラーメン(大)", "amount": 900 }];
-        const sideJson = [{ "id": "1", "name": "玉子", "amount": 100 }, { "id": "2", "name": "ほうれん草", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 150 }];
-        const drinkJson = [{ "id": "1", "name": "からだすこやか茶W", "amount": 200 }, { "id": "2", "name": "瓶ビール", "amount": 500 }];
         // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service_worker.js').then(function (registration) {
@@ -60,6 +59,13 @@
                 console.log('ServiceWorker registration failed: ', err);
             });
         }
+
+        const checkSetting = new Vue({
+            el: 'div#checklist',
+            data: {
+                checkedNames: ['ラーメン', 'トッピング']
+            }
+        })
 
         const main = new Vue({
             el: 'div#main',
@@ -75,24 +81,27 @@
             },
             methods: {
                 touchButton: function () {
+                    touch_se.currentTime = 0;
                     touch_se.play();
                     // ここにランダムでメニューを決める
                     var mn = Math.floor(Math.random() * mainJson.length);
                     var sn = Math.floor(Math.random() * sideJson.length);
                     var dn = Math.floor(Math.random() * drinkJson.length);
-                    this.main = mainJson[mn].name;
-                    this.mainAmount = mainJson[mn].amount;
+                    var nn = Math.floor(Math.random() * sizeArray.length);
+
+                    this.main = mainJson[mn].name + sizeArray[nn];
+                    this.mainAmount = mainJson[mn].amount + (nn * 100);
                     this.side = sideJson[sn].name;
                     this.sideAmount = sideJson[sn].amount;
                     // this.drink = drinkJson[dn].name;
                     // this.drinkAmount = drinkJson[dn].amount;
                     this.totalAmount = this.mainAmount + this.sideAmount + this.drinkAmount;
-                    if (this.totalAmount >= 1000) {
+                    console.log(sn);
+                    if (sn >= 8) { // ビール or すこやか茶だったらボイスが変わる。
                         console.log('pause');
                         touch_se.pause();
                         button_se.play();
                     }
-
                 },
                 clearButton: function () {
                     clear_se.play();
@@ -104,26 +113,21 @@
                     this.drink = '';
                     this.drinkAmount = '';
                     this.totalAmount = '';
-                },
-                onInput: function () {
-                    this.main = '';
-                    this.totalAmount = '';
-                    this.mainAmount = '';
-                    this.side = '';
-                    this.sideAmount = '';
-                    this.drink = '';
-                    this.drinkAmount = '';
-                    this.totalAmount = '';
                 }
+                // ,
+                // onInput: function () {
+                //     this.main = '';
+                //     this.totalAmount = '';
+                //     this.mainAmount = '';
+                //     this.side = '';
+                //     this.sideAmount = '';
+                //     this.drink = '';
+                //     this.drinkAmount = '';
+                //     this.totalAmount = '';
+                // }
             }
         })
 
-        const checkSetting = new Vue({
-            el: 'div#checklist',
-            data: {
-                checkedNames: ['ラーメン', 'トッピング']
-            }
-        })
     </script>
 </body>
 
