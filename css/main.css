@@ -1,3 +1,5 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&display=swap');
 html, body {
     height: 100%;
     overflow: hidden
@@ -8,9 +10,12 @@ html {
     box-sizing: border-box;
     text-align: center;
     background-color: azure;
+
+    border-style: solid;border-color: #454545;
+    border-width: 2px;
 }
 body {
-    font-family: 1rem cursive, "Helvetica Neue",    Arial,    "Hiragino Kaku Gothic ProN",    "Hiragino Sans",    Meiryo,    sans-serif;
+    font-family: 'Kiwi Maru', sans-serif;
     color: #333333;
     display: flex;
     flex-flow: column;
@@ -24,7 +29,8 @@ body {
 }
 
 h1 {
-    font: 2rem cursive;
+    font: 2rem cursive, 'Kiwi Maru';
+    text-decoration: none;
 }
 
 #total {
@@ -34,8 +40,27 @@ h1 {
     font-size: 1.1rem
 }
 
+.errorMsg{
+    color:rgb(231, 83, 83);
+    font-weight: bold;
+    font-size:0.9rem;
+
+}
+
+.frame {
+    border-style: solid;border-color: #454545;
+    border-width:2px;
+    padding: 8px;
+    height: 12%;
+    font-size:1.2rem;
+    margin: 10px;
+    max-width: 400px;
+    display:inline-block;
+}
+
 button {color:#454545;background:transparent;border-width:2px;border-style: solid;border-color: #454545;position:relative;margin:0.7em;display:inline-block;padding:0.8em 1em;transition:all 0.3s ease-in-out;text-align:center;
-    font-family:comfortaa;font-weight:bold;width:50%;max-width: 240px;font-size:1.2rem}
+    font-weight:bold;width:50%;max-width: 240px;font-size:1.2rem}
+    /* font-family:comfortaa; */
     button:before, button:after {content:'';display:block;position:absolute;border-color:#454545;box-sizing:border-box;border-style:solid;width:1em;height:1em;transition:all 0.3s ease-in-out}
     button:before {top:-6px;left:-6px;border-width:2px 0 0 2px;z-index:5;}
     button:after {bottom:-6px;right:-6px;border-width:0 2px 2px 0;}
@@ -45,15 +70,20 @@ button {color:#454545;background:transparent;border-width:2px;border-style: soli
     .panel {max-width:960px;text-align:center;position:relative;margin:auto;
 }
 
-footer {
-    margin-top: auto;
-    background-color: #cab64a;
-    padding: 10px 0px;
-    width: 100%;
+#secret{
+    pointer-events:none;
 }
+
+/* 
 header{
-    margin-bottom: auto;
+    margin-bottom: 5%;
     background-color: #cab64a;
     padding: 10px 0px;
     width: 100%;
 }
+footer {
+    margin-top: 5%;
+    background-color: #cab64a;
+    padding: 10px 0px;
+    width: 100%;
+} */

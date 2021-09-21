@@ -16,13 +16,13 @@
 
 <body>
     <header>　</header>
-
     <h1>
         Random Ramen
         <img src="images/ramen.svg" width="32" height="32">
     </h1>
     <div id="main">
-        <button v-on:click="touchButton" class="btn btn-flat">Touch!</button>
+        <div class="errorMsg">　{{ERROR_MESSAGE}}　</div>
+        <button v-on:click="touchButton" class="btn btn-flat">Touch</button>
         <p>ラーメン：<b>{{ main }} {{ mainAmount }}</b></p>
         <p>{{checkedNames[0]}}<b>{{ side }} {{ sideAmount }}</b></p>
         <p>{{checkedNames[1]}}<b>{{ side2 }} {{ sideAmount2 }}</b></p>
@@ -31,34 +31,36 @@
         </div>
         <button v-on:click="clearButton" class="btn btn-flat">Clear</button>
         <br>
-        <input type="checkbox" id="menu1" value="トッピング１：" v-model="checkedNames" @change="clearFunction()">
-        <label for="menu1">トッピング１</label>
-        <input type="checkbox" id="menu2" value="トッピング２：" v-model="checkedNames" @change="clearFunction()">
-        <label for="menu2">トッピング２</label>
+        <div class="frame">
+            ラーメンの量<br>
+            <input type="checkbox" id="size1" value="（並）" v-model="ramenSizes">
+            <label for="size1">（並）</label>
+            <input type="checkbox" id="size2" value="（中）" v-model="ramenSizes">
+            <label for="size2">（中）</label>
+            <input type="checkbox" id="size3" value="（大）" v-model="ramenSizes">
+            <label for="size3">（大）</label>
+        </div>
         <br>
-        <!-- {{checkedNames}} -->
-        <!-- <p>ラーメンの量</p>
-        <input type="checkbox" id="size1" value="（並）" v-model="ramenSizes">
-        <label for="size1">（並）</label>
-        <input type="checkbox" id="size2" value="（中）" v-model="ramenSizes">
-        <label for="size2">（中）</label>
-        <input type="checkbox" id="size3" value="（大）" v-model="ramenSizes">
-        <label for="size3">（大）</label> -->
-
+        <div class="frame">
+            トッピングの有無<br>
+            <input type="checkbox" id="menu1" value="トッピング１：" v-model="checkedNames" @change="clearFunction()">
+            <label for="menu1">トッピング１</label>
+            <input type="checkbox" id="menu2" value="トッピング２：" v-model="checkedNames" @change="clearFunction()">
+            <label for="menu2">トッピング２</label>
+        </div>
     </div>
     <footer>　</footer>
-
     <script>
         function clearFunction() {
             console.log('call clearFunction');
             mainApp.main = '';
-            mainApp.totalAmount = '';
             mainApp.mainAmount = '';
             mainApp.side = '';
             mainApp.sideAmount = '';
             mainApp.side2 = '';
             mainApp.sideAmount2 = '';
             mainApp.totalAmount = '';
+            mainApp.ERROR_MESSAGE = '';
         }
         const mainJson = [{ "id": "1", "name": "ラーメン", "amount": 700 }, { "id": "2", "name": "得ラーメン", "amount": 850 }, { "id": "3", "name": "チャーシューメン", "amount": 950 }, { "id": "4", "name": "野菜爆弾ラーメン", "amount": 1000 }];
         const sideJson = [{ "id": "1", "name": "味玉", "amount": 100 }, { "id": "2", "name": "のり", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 100 }, { "id": "4", "name": "ほうれん草", "amount": 100 }, { "id": "5", "name": "キャベツ", "amount": 100 }, { "id": "6", "name": "キャベチャー", "amount": 100 }, { "id": "7", "name": "チャーシュー", "amount": 250 }, { "id": "8", "name": "チーズ", "amount": 150 }, { "id": "9", "name": "ビール（中瓶）", "amount": 500 }, { "id": "10", "name": "からだすこやか茶", "amount": 200 }];
@@ -78,7 +80,6 @@
         const mainApp = new Vue({
             el: 'div#main',
             data: {
-                inputName: '',
                 main: '',
                 mainAmount: '',
                 side: '',
@@ -87,7 +88,8 @@
                 sideAmount2: '',
                 totalAmount: '',
                 checkedNames: ['トッピング１：'],
-                ramenSizes: ["（並）", "（中）", "（大）"]
+                ramenSizes: ['（並）', '（中）', '（大）'],
+                ERROR_MESSAGE: ''
             },
             methods: {
                 touchButton: function () {
@@ -98,19 +100,35 @@
                     var mn = Math.floor(Math.random() * mainJson.length);
                     // ラーメンの量 TODO:
                     var nn = Math.floor(Math.random() * this.ramenSizes.length);
+                    var ramenSize = this.ramenSizes[nn];
                     // トッピング１の種類
                     var sn = Math.floor(Math.random() * sideJson.length);
                     // トッピング２の種類
                     var sn2 = Math.floor(Math.random() * sideJson2.length);
+                    console.log('nn:' + nn);
+                    console.log('ramenSize:' + ramenSize);
+                    if (ramenSize === '（並）') {
+                        console.log('（並）');
+                        this.mainAmount = mainJson[mn].amount;
+                    } else if (ramenSize === '（中）') {
+                        console.log('（中）');
+                        this.mainAmount = mainJson[mn].amount + 100;
+                    } else if (ramenSize === '（大）') {
+                        console.log('（大）');
+                        this.mainAmount = mainJson[mn].amount + 200;
+                    } else {
+                        this.ERROR_MESSAGE = '【ラーメンの量は最低1つ設定してください】';
+                        touch_se.pause();
+                        button_se.play();
+                        return;
+                    }
 
-                    this.main = mainJson[mn].name + this.ramenSizes[nn];
-                    this.mainAmount = mainJson[mn].amount + (nn * 100);
-
+                    this.main = mainJson[mn].name + ramenSize;
                     // トッピングの有無によって条件分岐
-                    if (this.checkedNames.length == 0) {
+                    if (this.checkedNames.length === 0) {
                         console.log('debug0');
                         this.totalAmount = this.mainAmount
-                    } else if (this.checkedNames.length == 1) {
+                    } else if (this.checkedNames.length === 1) {
                         console.log('debug1');
                         this.side = sideJson[sn].name;
                         this.sideAmount = sideJson[sn].amount;
@@ -123,18 +141,17 @@
                         this.sideAmount2 = sideJson2[sn2].amount;
                         this.totalAmount = (this.mainAmount + this.sideAmount + this.sideAmount2);
                     }
-
-                    if (sn >= 8 || sn2 >= 8) { // ビール or すこやか茶だったらボイスが変わる。
-                        console.log('pause');
-                        touch_se.pause();
-                        button_se.play();
-                    }
                 },
                 clearButton: function () {
+                    if (this.checkedNames.length === 0 && this.ramenSizes[0] === '（中）' && this.main === '得ラーメン（中）') {
+                        alert('WOW');
+                        document.location.href = "secret.html";
+                    }
+                    clear_se.currentTime = 0;
                     clear_se.play();
                     clearFunction();
                     this.checkedNames = ['トッピング１：']
-                    this.ramenSizes = ["（並）", "（中）", "（大）"];
+                    this.ramenSizes = ['（並）', '（中）', '（大）'];
                 }
             }
         })
