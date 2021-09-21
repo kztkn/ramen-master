@@ -65,9 +65,9 @@
         const mainJson = [{ "id": "1", "name": "ラーメン", "amount": 700 }, { "id": "2", "name": "得ラーメン", "amount": 850 }, { "id": "3", "name": "チャーシューメン", "amount": 950 }, { "id": "4", "name": "野菜爆弾ラーメン", "amount": 1000 }];
         const sideJson = [{ "id": "1", "name": "味玉", "amount": 100 }, { "id": "2", "name": "のり", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 100 }, { "id": "4", "name": "ほうれん草", "amount": 100 }, { "id": "5", "name": "キャベツ", "amount": 100 }, { "id": "6", "name": "キャベチャー", "amount": 100 }, { "id": "7", "name": "チャーシュー", "amount": 250 }, { "id": "8", "name": "チーズ", "amount": 150 }, { "id": "9", "name": "ビール（中瓶）", "amount": 500 }, { "id": "10", "name": "からだすこやか茶", "amount": 200 }];
         const sideJson2 = [{ "id": "1", "name": "味玉", "amount": 100 }, { "id": "2", "name": "のり", "amount": 100 }, { "id": "3", "name": "九条ネギ", "amount": 100 }, { "id": "4", "name": "ほうれん草", "amount": 100 }, { "id": "5", "name": "キャベツ", "amount": 100 }, { "id": "6", "name": "キャベチャー", "amount": 100 }, { "id": "7", "name": "チャーシュー", "amount": 250 }, { "id": "8", "name": "チーズ", "amount": 150 }, { "id": "9", "name": "ビール（中瓶）", "amount": 500 }, { "id": "10", "name": "からだすこやか茶", "amount": 200 }, { "id": "11", "name": "からだすこやか茶", "amount": 200 }]; // sideJson2はお茶率UP
-        const button_se = new Audio('sound/gochuumonwodouzo_01.wav');
-        const touch_se = new Audio('sound/touch_01.wav');
-        const clear_se = new Audio('sound/clear_01.wav');
+        const button_se = new Audio('sound/gochuumonwodouzo_01.mp3');
+        const touch_se = new Audio('sound/touch_01.mp3');
+        const clear_se = new Audio('sound/clear_01.mp3');
         // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service_worker.js').then(function (registration) {
